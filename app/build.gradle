@@ -74,4 +74,6 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.junit_ext"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+    debugImplementation "androidx.fragment:fragment-testing:$versions.fragment_version"
+    debugImplementation "io.mockk:mockk-android:$versions.mock_android"
 }
