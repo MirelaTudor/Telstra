@@ -7,7 +7,6 @@ import au.com.telstra.R
 import au.com.telstra.data.domain.FactRepository
 import au.com.telstra.ui.fact.FactView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -25,27 +24,34 @@ class FactListViewModel @Inject constructor(
     val errorMessageResLiveData = MutableLiveData<Int>()
 
     init {
+        loadFacts()
         refresh()
     }
 
     // method used to retrieve the data from networking
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            factRepository
-                .refreshFacts()
-                .catch { error ->
-                    val message = if (error is IOException)
-                        R.string.no_internet_connection
-                    else R.string.default_error_message
+            try {
+                factRepository.refreshFacts()
+            } catch (e: Exception) {
+                val message = if (e is IOException)
+                    R.string.no_internet_connection
+                else R.string.default_error_message
 
-                    errorMessageResLiveData.postValue(message)
-                }
-                .collect {
-                    titleLiveData.postValue(it.title)
-                    facListLiveData.postValue(it.facts.map { entity ->
-                        FactView.DataModel(entity.title, entity.description, entity.imageUrl)
-                    })
-                }
+                errorMessageResLiveData.postValue(message)
+            }
+        }
+    }
+
+    // load the data from caching, if exists
+    private fun loadFacts() {
+        viewModelScope.launch(Dispatchers.Main) {
+            factRepository.getFacts().collect {
+                titleLiveData.postValue(it.title)
+                facListLiveData.postValue(it.facts.map { entity ->
+                    FactView.DataModel(entity.title, entity.description, entity.imageUrl)
+                })
+            }
         }
     }
 }

@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FactRepository {
 
-    suspend fun refreshFacts(): Flow<FactEntityList>
+    suspend fun getFacts(): Flow<FactEntityList>
+
+    suspend fun refreshFacts()
 }

@@ -1,5 +1,6 @@
 package au.com.telstra.data.domain.mapper
 
+import au.com.telstra.data.database.FactsDao
 import au.com.telstra.data.domain.model.FactEntity
 import au.com.telstra.data.domain.model.FactEntityList
 import au.com.telstra.data.remote.FactListResponse
@@ -17,6 +18,13 @@ class FactEntityMapper @Inject constructor() {
             it.title != null || it.description != null || it.imageHref != null
         }.map {
             FactEntity(it.title, it.description, it.imageHref)
+        }
+    )
+
+    fun mapFromLocal(factsDao: FactsDao) = FactEntityList(
+        factsDao.title,
+        factsDao.list.map {
+            FactEntity(it.title, it.description, it.imageUrl)
         }
     )
 }
