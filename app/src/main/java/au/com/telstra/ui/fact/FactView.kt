@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
 import au.com.telstra.R
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.item_fact.view.*
 
 /**
  * The view that represents one item of the list
@@ -29,6 +31,12 @@ class FactView @JvmOverloads constructor(
     }
 
     fun bindData(fact: DataModel) {
-
+        title.text = fact.title
+        description.text = fact.description
+        Glide.with(context)
+            .load(fact.imageUrl)
+            .placeholder(R.mipmap.ic_launcher)
+            .error(R.drawable.ic_error)
+            .into(image)
     }
 }

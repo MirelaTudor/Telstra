@@ -3,6 +3,7 @@ package au.com.telstra.di.components
 import android.app.Application
 import au.com.telstra.TelstraApp
 import au.com.telstra.di.modules.ActivityModule
+import au.com.telstra.di.modules.ApiModule
 import au.com.telstra.di.modules.AppModule
 import dagger.BindsInstance
 import dagger.Component
@@ -14,7 +15,8 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        ActivityModule::class
+        ActivityModule::class,
+        ApiModule::class
     ]
 )
 interface AppComponent {
